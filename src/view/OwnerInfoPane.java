@@ -1,13 +1,19 @@
 package view;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import model.PeopleBagV2;
+import model.Address;
+import model.Club;
+import model.Owner;
+import model.PeopleBag;
+import model.TextFieldCheck;
 
 public class OwnerInfoPane {
 	private VBox mPane;
@@ -42,15 +48,28 @@ public class OwnerInfoPane {
 	private TextField passwordFld;
 	
 	private Button editBtn;
+	private Button saveBtn;
+	
+	private HBox subBox;
 	
 	
-	public OwnerInfoPane(){
+	public OwnerInfoPane(PeopleBag pBag, Owner o){
+		subBox = new HBox(10);
+		subBox.setAlignment(Pos.CENTER);
 		Insets insets = new Insets(10,10,10,50);
 		mPane = new VBox(10);
 		mPane.setPadding(insets);
+		mPane.setAlignment(Pos.CENTER);
+		mPane.setPadding(insets);
 		gPane = new GridPane();
+		gPane.setPadding(insets);
+		gPane.setAlignment(Pos.CENTER);
 		gPane2 = new GridPane();
+		gPane2.setPadding(insets);
+		gPane2.setAlignment(Pos.CENTER);
 		gPane3 = new GridPane();
+		gPane3.setPadding(insets);
+		gPane3.setAlignment(Pos.CENTER);
 		
 		pInfoTxt = new Text("Personal Info:");
 		addressTxt = new Text("Home Address:");
@@ -86,8 +105,9 @@ public class OwnerInfoPane {
 		zipFld.setEditable(false);
 		loginFld.setEditable(false);
 		passwordFld.setEditable(false);
-		
+		saveBtn = new Button("Save");
 		editBtn = new Button("Edit");
+		subBox.getChildren().add(editBtn);
 		// Pane for Info
 		gPane.add(fNameLbl, 0, 0);
 		gPane.add(fNameFld, 1, 0);
@@ -98,21 +118,119 @@ public class OwnerInfoPane {
 		//Pane for address
 		gPane2.add(stNameLbl, 0, 0);
 		gPane2.add(stNameFld, 1, 0);
-		gPane2.add(stNumberLbl, 2, 0);
-		gPane2.add(stNumberFld, 3, 0);
-		gPane2.add(cityLbl, 0, 1);
-		gPane2.add(cityFld, 1, 1);
-		gPane2.add(stateLbl, 0, 2);
-		gPane2.add(stateFld, 1, 2);
-		gPane2.add(zipLbl, 0, 3);
-		gPane2.add(zipFld, 1, 3);
+		gPane2.add(stNumberLbl, 0, 1);
+		gPane2.add(stNumberFld, 1, 1);
+		gPane2.add(cityLbl, 0, 2);
+		gPane2.add(cityFld, 1, 2);
+		gPane2.add(stateLbl, 0, 3);
+		gPane2.add(stateFld, 1, 3);
+		gPane2.add(zipLbl, 0, 4);
+		gPane2.add(zipFld, 1, 4);
 		//Pane for account
 		gPane3.add(loginLbl, 0, 0);
 		gPane3.add(loginFld, 1, 0);
 		gPane3.add(passwordLbl, 0, 1);
 		gPane3.add(passwordFld, 1, 1);
 		
-		mPane.getChildren().addAll(pInfoTxt, gPane, addressTxt, gPane2, accountTxt, gPane3, editBtn);
+		
+		fNameFld.setText(o.getfName());
+		lNameFld.setText(o.getlName());
+		phoneFld.setText(o.getPhone());
+		stNameFld.setText(o.getAddress().getStName());
+		stNumberFld.setText(o.getAddress().getStNumber());
+		cityFld.setText(o.getAddress().getCity());
+		stateFld.setText(o.getAddress().getState());
+		zipFld.setText(o.getAddress().getZip());
+		loginFld.setText(o.getLogin());
+		passwordFld.setText(o.getPassword());
+		
+		editBtn.setOnAction(e->{
+			fNameFld.setEditable(true);
+			lNameFld.setEditable(true);
+			phoneFld.setEditable(true);
+			stNameFld.setEditable(true);
+			stNumberFld.setEditable(true);
+			cityFld.setEditable(true);
+			stateFld.setEditable(true);
+			zipFld.setEditable(true);
+			loginFld.setEditable(true);
+			passwordFld.setEditable(true);
+			subBox.getChildren().clear();
+			subBox.getChildren().add(saveBtn);
+			
+		});
+		
+		saveBtn.setOnAction(e->{
+			String fName = fNameFld.getText();
+			try {
+				TextFieldCheck.checkfName(fName);
+			} catch (Exception e2) {
+				return;
+			}
+			String lName = lNameFld.getText();
+			try {
+				TextFieldCheck.checklName(lName);
+			} catch (Exception e2) {
+				return;
+			}
+			String phone = phoneFld.getText();
+			try {
+				TextFieldCheck.checkPhone(phone);
+			} catch (Exception e2) {
+				return;
+			}
+			String stName = stNameFld.getText();
+			try {
+				TextFieldCheck.checkSName(stName);
+			} catch (Exception e3) {
+				return;
+			}
+			String stNum = stNumberFld.getText();
+			try {
+				TextFieldCheck.checkSNumber(stNum);
+			} catch (Exception e3) {
+				return;
+			}
+			String city = cityFld.getText();
+			try {
+				TextFieldCheck.checkCity(city);
+			} catch (Exception e2) {
+				return;
+			}
+			String state = stateFld.getText();
+			String zip = zipFld.getText();
+			try {
+				TextFieldCheck.checkZip(zip);
+			} catch (Exception e2) {
+				return;
+			}
+			Address a = new Address(stName, stNum, city, state, zip);
+			
+			String login = loginFld.getText();
+			try {
+				TextFieldCheck.checkLoginOwnerInfo(pBag,login, o);
+			} catch (Exception e2) {
+				return;
+			}
+			String password = passwordFld.getText();
+			try {
+				TextFieldCheck.checkPassword(password);
+			} catch (Exception e2) {
+				return;
+			}
+			o.setAddress(a);
+			o.setfName(fName);
+			o.setlName(lName);
+			o.setPhone(phone);
+			o.setLogin(login);
+			o.setPassword(password);
+			
+			pBag.save();
+			new InfoClass();
+		});
+		
+		
+		mPane.getChildren().addAll(pInfoTxt, gPane, addressTxt, gPane2, accountTxt, gPane3, subBox);
 		
 		
 		

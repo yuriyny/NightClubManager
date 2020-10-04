@@ -14,7 +14,7 @@ public class Address implements Serializable {
 	private String state;
 	private String zip;
 
-	public Address(String stNumber, String stName, String city, String state, String zip) {
+	public Address(String stName, String stNumber, String city, String state, String zip) {
 		this.stNumber = stNumber;
 		this.stName = stName;
 		this.city = city;

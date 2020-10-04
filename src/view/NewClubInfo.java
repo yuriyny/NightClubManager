@@ -1,7 +1,8 @@
 package view;
 
-import controller.ClubListener;
-import controller.ClubRegisterEvent;
+
+
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -11,6 +12,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import model.Address;
 import model.Club;
+import model.EventBag;
+import model.Owner;
+import model.PeopleBag;
+import model.TextFieldCheck;
 
 public class NewClubInfo {
 	private GridPane gPane;
@@ -35,22 +40,24 @@ public class NewClubInfo {
 	private TextField phoneFld;
 	private TextField emailFld;
 	
-	private ClubListener listener;
 	
 	private HBox hPane;
 	
-	public NewClubInfo(){
+	public NewClubInfo(PeopleBag pBag, Owner o){
 		titleTxt = new Text("Please Add New Club Information Here");
 		gPane = new GridPane();
+		gPane.setAlignment(Pos.CENTER);
 		vPane = new VBox(30);
+		vPane.setAlignment(Pos.CENTER);
 		hPane = new HBox(20);
+		hPane.setAlignment(Pos.CENTER);
 		nameLbl = new Label("Club Name:");
 		stNameLbl = new Label("Street Name:");
 		stNumberLbl = new Label("Street Number:");
 		cityLbl = new Label("City:");
 		stateLbl = new Label("State:");
 		zipLbl = new Label("ZIP Code:");
-		phoneLbl = new Label("Phene:");
+		phoneLbl = new Label("Phone:");
 		emailLbl = new Label("Email:");
 		
 		nameFld = new TextField();
@@ -85,23 +92,58 @@ public class NewClubInfo {
 		
 		addBtn.setOnAction(e->{
 			String name = nameFld.getText();
+			try {
+				TextFieldCheck.checkName(name);
+			} catch (Exception e2) {
+				return;
+			}
 			String stName = stNameFld.getText();
+			try {
+				TextFieldCheck.checkSName(stName);
+			} catch (Exception e3) {
+				return;
+			}
 			String stNumber = stNumberFld.getText();
+			try {
+				TextFieldCheck.checkSNumber(stNumber);
+			} catch (Exception e3) {
+				return;
+			}
 			String city = cityFld.getText(); 
+			try {
+				TextFieldCheck.checkCity(city);
+			} catch (Exception e2) {
+				return;
+			}
 			String state = stateFld.getText();
 			String zip = zipFld.getText();
+			try {
+				TextFieldCheck.checkZip(zip);
+			} catch (Exception e2) {
+				return;
+			}
 			String phone = phoneFld.getText();
+			try {
+				TextFieldCheck.checkPhone(phone);
+			} catch (Exception e2) {
+				return;
+			}
 			String email = emailFld.getText();
-			Address address = new Address(stName, stNumber, city, state, zip);
-			Club club = new Club(name, address, phone, email);
-			ClubRegisterEvent ev = new ClubRegisterEvent(this, club);
-			if(listener != null){
-				listener.click(ev);
-				System.out.println("sdfgefghfdhfd");
+			try {
+				TextFieldCheck.checkEmail(email);
+			} catch (Exception e2) {
+				return;
 			}
 			
+			Address address = new Address(stName, stNumber, city, state, zip);
+			EventBag eb = new EventBag();
+			Club club = new Club(name, address, phone, email, eb);
+			o.setClub(club);
+			pBag.change(o.getId(), o);
+			pBag.save();
+			new InfoClass();
 		});
-		System.out.println("Pressed");
+		
 		
 	}
 	
@@ -109,8 +151,5 @@ public class NewClubInfo {
 		return vPane;
 	}
 	
-	public void setClubListener(ClubListener listener){
-		this.listener = listener;
-	}
 
 }

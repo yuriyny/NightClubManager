@@ -1,8 +1,5 @@
 package view;
 
-import controller.OwnerLoginListener;
-import controller.OwnerRegisterEvent;
-import controller.OwnerRegisterListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -16,18 +13,17 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Address;
+import model.Club;
 import model.Owner;
 import model.PeopleBag;
-import model.PeopleBagV2;
+import model.TextFieldCheck;
 
 
 public class NewOwnerWindow {
-	private PeopleBagV2 pBag;
+	private PeopleBag pBag;
 	private Stage stage;
 	private Scene scene;
-//	private PeopleBag peopleBag;
 	private VBox owPane;
-//	private HBox buttonPane;
 
 	private TextField fNameFld;
 	private TextField lNameFld;
@@ -61,16 +57,14 @@ public class NewOwnerWindow {
 	private Address address;
 	private Owner owner;
 
-	public NewOwnerWindow(OwnerLoginListener listener) {
-		//this.pBag = pBag;
-//		pBag.load();
+	public NewOwnerWindow(PeopleBag pBag) {
 		Label fNameLbl = new Label("First Name:");
 		Label lNameLbl = new Label("Last Name:");
 		Label idLbl = new Label("ID:");
 		Label phoneLbl = new Label("Phone number:");
 
 		Text addressText = new Text("Home address:");
-		Text clubAddressText = new Text("-------------Club Info:--------------");
+		//Text clubAddressText = new Text("-------------Club Info:--------------");
 		Text accountText = new Text("Account Info:");
 
 		fNameFld = new TextField();
@@ -158,52 +152,90 @@ public class NewOwnerWindow {
 
 		// Address Fields
 		owAddressPane.getChildren().addAll(nameFld, numberFld, cityFld, stateBox, zipFld);
-		clAddressPane.getChildren().addAll(clNameFld, clNumberFld, clCityFld, clStateBox, clZipFld);
+		//clAddressPane.getChildren().addAll(clNameFld, clNumberFld, clCityFld, clStateBox, clZipFld);
 		
 		// button
 		registerBtn = new Button("Register");
 		
 		registerBtn.setOnAction(e->{
 			String fName = fNameFld.getText();
-			String lName = lNameFld.getText();
-			String phone = phoneFld.getText();
-			String street = nameFld.getText();
-			String stNumber = numberFld.getText();
-			String town = cityFld.getText();
-			String state = stateBox.getValue();
-			String zip = zipFld.getText();
-//			String clSreet = nameFld.getText();
-//			String clNumber = numberFld.getText();
-//			String clTown = cityFld.getText();
-//			String clState = stateBox.getValue();
-//			String clZip = zipFld.getText();
-			String login = loginFld.getText();
-			String password = passwordFld.getText();
-			
-			address = new Address(street, stNumber, town, state, zip);
-			
-			owner = new Owner(fName,lName, phone, address, login, password,null, null);
-			//System.out.println(owner);
-			
-			
-			OwnerRegisterEvent ev = new OwnerRegisterEvent(this, owner, address);
-			if(listener != null){
-				listener.clicked2(ev);
-				
-				
+			try {
+				TextFieldCheck.checkfName(fName);
+			} catch (Exception e2) {
+				return;
 			}
+			String lName = lNameFld.getText();
+			try {
+				TextFieldCheck.checklName(lName);
+			} catch (Exception e2) {
+				return;
+			}
+			String phone = phoneFld.getText();
+			try {
+				TextFieldCheck.checkPhone(phone);
+			} catch (Exception e2) {
+				return;
+			}
+			String stName = nameFld.getText();
+			try {
+				TextFieldCheck.checkSName(stName);
+			} catch (Exception e3) {
+				return;
+			}
+			String stNumber = numberFld.getText();
+			try {
+				TextFieldCheck.checkSNumber(stNumber);
+			} catch (Exception e3) {
+				return;
+			}
+			String town = cityFld.getText();
+			try {
+				TextFieldCheck.checkCity(town);
+			} catch (Exception e2) {
+				return;
+			}
+			String state = stateBox.getValue();
 			
-//			pBag.add(owner);
-//			pBag.save();
-			
-			//pBag.load();
+			String zip = zipFld.getText();
+			try {
+				TextFieldCheck.checkZip(zip);
+			} catch (Exception e2) {
+				return;
+			}
+
+			String login = loginFld.getText();
+			try {
+				TextFieldCheck.checkLoginReg(pBag, login);
+			} catch (Exception e2) {
+				return;
+			}
+			String password = passwordFld.getText();
+			try {
+				TextFieldCheck.checkPassword(password);
+			} catch (Exception e2) {
+				return;
+			}
+//			
+//			String clStName = clNameFld.getText();
+//			String clNumber = clNumberFld.getText();
+//			String
+//			
+//					clNameFld, clNumberFld, clCityFld, clStateBox, clZipFld
+			address = new Address(stName, stNumber, town, state, zip);
+			PeopleBag mBag = new PeopleBag();
+			Club club = new Club();
+			owner = new Owner(fName,lName, phone, address, login, password,mBag, club);
+			System.out.println(owner);
+			pBag.add(owner);
+			pBag.save();
+			new InfoClass();
+			stage.close();
+
 		
 		});
-		//OwnerController oc = new OwnerController(this);
+	
 
-		// VBox
-
-		owPane.getChildren().addAll(new Text("Personal Information:"), owNamePane, addressText, owAddressPane,clubAddressText, clAddressPane, 
+		owPane.getChildren().addAll(new Text("Personal Information:"), owNamePane, addressText, owAddressPane, clAddressPane, 
 				accountText, accPane, registerBtn);
 		owPane.setAlignment(Pos.TOP_CENTER);
 

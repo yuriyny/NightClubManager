@@ -1,17 +1,31 @@
 package model;
 
-public class Club {
+import java.io.Serializable;
+
+public class Club implements Serializable{
 	private String name;
 	private Address address;
 	public String phone;
 	public String email;
+	private EventBag eBag;
 //	private InventoryBag iBag;
-	public Club(String name, Address address, String phone, String email) {
+	public Club(String name, Address address, String phone, String email, EventBag eBag) {
 		super();
 		this.name = name;
 		this.address = address;
 		this.phone = phone;
 		this.email = email;
+		this.eBag = eBag;
+	}
+	
+	public Club(){
+		
+	}
+	public EventBag geteBag() {
+		return eBag;
+	}
+	public void seteBag(EventBag eBag) {
+		this.eBag = eBag;
 	}
 	public String getName() {
 		return name;

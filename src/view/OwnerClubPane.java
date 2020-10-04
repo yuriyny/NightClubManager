@@ -1,11 +1,17 @@
 package view;
 
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import model.Address;
+import model.Club;
+import model.Owner;
+import model.PeopleBag;
 
 public class OwnerClubPane {
 	private Text titleTxt;
@@ -34,13 +40,19 @@ public class OwnerClubPane {
 	private TextField emailFld;
 	
 	private HBox hPane;
+	private HBox buttonPane;
+	private Button changeBtn;
+	private Button saveBtn;
 	
-	public OwnerClubPane(){
+	public OwnerClubPane(PeopleBag pBag, Owner o){
 		titleTxt = new Text("Club Information");
 		gPane = new GridPane();
-		
+		gPane.setAlignment(Pos.CENTER);
 		vPane = new VBox(30);
+		vPane.setAlignment(Pos.CENTER);
 		hPane = new HBox(20);
+		hPane.setAlignment(Pos.CENTER);
+		
 		nameLbl = new Label("Club Name:");
 		stNameLbl = new Label("Street Name:");
 		stNumberLbl = new Label("Street Number:");
@@ -56,10 +68,17 @@ public class OwnerClubPane {
 		cityFld = new TextField();
 		stateFld = new TextField();
 		zipFld = new TextField();
+		nameFld.setEditable(false);
+		stNameFld.setEditable(false);
+		stNumberFld.setEditable(false);
+		cityFld.setEditable(false);
+		stateFld.setEditable(false);
+		zipFld.setEditable(false);
 		
 		phoneFld = new TextField();
+		phoneFld.setEditable(false);
 		emailFld = new TextField();
-		
+		emailFld.setEditable(false);
 		
 		hPane.getChildren().addAll(nameLbl, nameFld);
 		
@@ -79,12 +98,71 @@ public class OwnerClubPane {
 		gPane.add(phoneFld, 1, 5);
 		gPane.add(emailFld, 1, 6);
 		
-		vPane.getChildren().addAll(titleTxt, hPane, gPane);
+		buttonPane = new HBox();
+		buttonPane.setAlignment(Pos.CENTER);
+		changeBtn = new Button("Change");
+		saveBtn = new Button("Save Changes");
+		buttonPane.getChildren().addAll(changeBtn);
+		buttonPane.setAlignment(Pos.CENTER);
+		changeBtn.setOnAction(e->{
+			buttonPane.getChildren().remove(changeBtn);
+			phoneFld.setEditable(true);
+			emailFld.setEditable(true);
+			nameFld.setEditable(true);
+			stNameFld.setEditable(true);
+			stNumberFld.setEditable(true);
+			cityFld.setEditable(true);
+			stateFld.setEditable(true);
+			zipFld.setEditable(true);
+			phoneFld.setEditable(true);
+			emailFld.setEditable(true);
+			buttonPane.getChildren().add(saveBtn);
+		});
+		saveBtn.setOnAction(e->{
+			System.out.println("Save pressed");
+			String name = nameFld.getText();
+			String stName = stNameFld.getText();
+			String stNumber = stNumberFld.getText();
+			String city = cityFld.getText();
+			String state = stateFld.getText();
+			String zip = zipFld.getText();
+			String phone = phoneFld.getText();
+			String email = emailFld.getText();
+			Address a = new Address(stName, stNumber, city, state,zip);
+			Club c = new Club(name, a, phone, email, o.getClub().geteBag());
+			o.setClub(c);
+			pBag.change(o.getId(), o);
+			pBag.save();
+			new InfoClass();
+			
+		});
+		
+		vPane.getChildren().addAll(titleTxt, hPane, gPane, buttonPane);
 		
 		
 	}
 	
 	
+	public TextField getPhoneFld() {
+		return phoneFld;
+	}
+
+
+	public void setPhoneFld(TextField phoneFld) {
+		this.phoneFld = phoneFld;
+	}
+
+
+	public TextField getEmailFld() {
+		return emailFld;
+	}
+
+
+	public void setEmailFld(TextField emailFld) {
+		this.emailFld = emailFld;
+	}
+
+
 	public VBox getPane(){
 		return vPane;
 	}

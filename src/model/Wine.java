@@ -1,31 +1,29 @@
 package model;
 
-public class Wine implements IInventory {
-	private String name;
+import java.io.Serializable;
+
+public class Wine implements Serializable {
 	private String price;
 
-	public Wine(String name, String price) {
+	public Wine(String price) {
 		super();
-		this.name = name;
 		this.price = price;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getPrice() {
 		return price;
 	}
 
-	@Override
 	public void setPrice(String price) {
-
+		this.price = price;
 	}
 
 	@Override
-	public String getName() {
-		
-		return name;
+	public String toString() {
+		return "Wine [price=" + price + "]";
 	}
+	
+	
+	
+
 }

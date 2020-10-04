@@ -1,23 +1,23 @@
 package model;
 
-public class Owner extends Person {
+public class Owner extends Person  {
 	
 	//private ClubBag clubBag;
 //	private String test;
-	private PeopleBagV2 pBag;
+	private PeopleBag pBag;
 	private Club club;
 
-	public Owner(String fName, String lName, String phone, Address address, String login, String password, PeopleBagV2 pBag, Club club) {
+	public Owner(String fName, String lName, String phone, Address address, String login, String password, PeopleBag pBag, Club club) {
 		super(fName, lName, phone, address, login, password);
 		this.pBag = pBag;
 		this.club = club;
 	}
 
-	public PeopleBagV2 getpBag() {
+	public PeopleBag getpBag() {
 		return pBag;
 	}
 
-	public void setpBag(PeopleBagV2 pBag) {
+	public void setpBag(PeopleBag pBag) {
 		this.pBag = pBag;
 	}
 
@@ -31,8 +31,16 @@ public class Owner extends Person {
 
 	@Override
 	public String toString() {
-		return "Owner [pBag=" + pBag + ", club=" + club + "]";
+		return "Owner [getLogin()=" + getLogin() + ", getPassword()=" + getPassword() + ", getfName()=" + getfName()
+				+ ", getlName()=" + getlName() + ", getId()=" + getId() + ", getPhone()=" + getPhone()
+				+ ", getAddress()=" + getAddress() + ", pBag=" + pBag + ", club=" + club + "]";
 	}
+	
+	
+
+	
+
+	
 	
 
 

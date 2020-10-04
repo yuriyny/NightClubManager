@@ -1,32 +1,28 @@
 package model;
 
-public class Water implements IInventory{
-	private String name;
+import java.io.Serializable;
+
+public class Water implements Serializable{
 	private String price;
-	public Water(String name, String price) {
+
+	public Water(String price) {
 		super();
-		this.name = name;
 		this.price = price;
 	}
-	@Override
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
+
 	public String getPrice() {
 		return price;
 	}
-	
-	@Override
-	public String toString() {
-		return "Water [name=" + name + ", price=" + price + "]";
-	}
-	@Override
+
 	public void setPrice(String price) {
 		this.price = price;
 	}
+
+	public String toString() {
+		return "Water [price=" + price + "]";
+	}
+	
+	
 	
 	
 	
